@@ -1,0 +1,172 @@
+swagger: "2.0"
+info:
+  title: GO Swagger API
+  description: A simple API built with Swagger for demonstration
+  version: 0.0.1
+
+basePath: /api
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+
+paths:
+  /v1/users:
+    get:
+      summary: Returns list of all users
+      description: |
+        Get list of all users
+        ```
+        GET /api/v1/users
+      responses:
+        '200':
+          description: Users fetched successfully
+          schema:
+            $ref: '#/definitions/Users'
+        '500':
+          description: Error while fetching all user ids
+          schema:
+            $ref: '#/definitions/Status'
+    post:
+      summary: Create new user
+      parameters:
+        - in: body
+          name: userRequest
+          required: true
+          description: Parameters of users information
+          schema:
+            $ref: '#/definitions/UserRequest'
+      description: |
+        Create a new user
+        ```
+        POST /api/v1/users
+        ```
+      responses:
+        '200':
+          description: New user created successfully
+          schema:
+            $ref: '#/definitions/userId'
+        '400':
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/Status'
+        '500':
+          description: Error while creating new user
+          schema:
+            $ref: '#/definitions/Status'
+
+  /v1/users/{userId}:
+    get:
+      summary: Returns the user information of the given user id
+      description: |
+        Get user of given user id
+        ```
+        GET /api/v1/users/{userId}
+        ```
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          description: User id
+          type: string
+      responses:
+        '200':
+          description: User data was fetched successfully
+          schema:
+            $ref: '#/definitions/UserResponse'
+        '404':
+          description: User data for given user id was not found
+          schema:
+            $ref: '#/definitions/Status'
+        '500':
+          description: Error while fetching User data
+          schema:
+            $ref: '#/definitions/Status'
+    delete:
+      summary: Removes the User data of given user id
+      description: |
+        Delete user data of given user id
+        ```
+        DELETE /api/v1/users/{userId}
+        ```
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          description: User id
+          type: string
+      responses:
+        '200':
+          description: User was removed successfully
+          schema:
+            $ref: '#/definitions/Status'
+        '404':
+          description: User of the given user id was not found
+          schema:
+            $ref: '#/definitions/Status'
+        '500':
+          description: Error while deleting the user
+          schema:
+            $ref: '#/definitions/Status'
+
+definitions:
+  Users:
+    type: array
+    items:
+      type: string
+  UserResponse:
+    type: object
+    required:
+      - userId
+      - userName
+      - userFullName
+      - registeredAt
+    properties:
+      userId:
+        type: string
+      userName:
+        type: string
+      userFullName:
+        type: string
+      userEmail:
+        type: string
+      userAddress:
+        type: string
+      registeredAt:
+        type: string
+  userId:
+    type: string
+    description: User ID of the created user
+  Status:
+    type: object
+    description: The user success status
+    properties:
+      code:
+        type: integer
+        description: status code
+      message:
+        type: string
+        description: status message
+  UserRequest:
+    type: object
+    required:
+      - userId
+      - userName
+    properties:
+      userId:
+        type: string
+      userName:
+        type: string
+      userFullName:
+        type: string
+      userEmail:
+        type: string
+      userAddress:
+        type: string
+      registeredAt:
+        type: string
+
+
+
